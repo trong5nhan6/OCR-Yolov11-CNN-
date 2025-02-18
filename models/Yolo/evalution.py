@@ -40,8 +40,8 @@ def visualize_bbox(
     return img
 
 
-model_path = "runs/detect/train/weights/best.pt"
-img_path = "datasets/SceneTrialTrain/apanar_06.08.2002/IMG_1255.JPG"
+model_path = "models/weight/best.pt"
+img_path = "data/SceneTrialTrain/apanar_06.08.2002/IMG_1261.JPG"
 conf_thres = 0.75
 model = YOLO(model_path)
 
