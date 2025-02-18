@@ -1,0 +1,6 @@
+path: data/yolo_data
+train: train/images
+test: test/images
+val: val/images
+nc: 1
+names: ['text']
