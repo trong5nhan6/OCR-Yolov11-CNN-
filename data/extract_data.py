@@ -5,7 +5,7 @@ import shutil
 from sklearn.model_selection import train_test_split
 
 
-def extrac_data_from_xml(path):
+def extract_data_from_xml(path):
     tree = ET.parse(path)
     root = tree.getroot()
 
@@ -89,43 +89,49 @@ def save_data(data, src_img_dir, save_dir):
                 f.write(f'{label}\n')
 
 
-dataset_dir = "data/SceneTrialTrain"
-words_xml_path = os.path.join(dataset_dir, "words.xml")
-img_paths, img_sizes, bboxes, img_labels = extrac_data_from_xml(words_xml_path)
+def main():
+    dataset_dir = "data/SceneTrialTrain"
+    words_xml_path = os.path.join(dataset_dir, "words.xml")
+    img_paths, img_sizes, bboxes, img_labels = extract_data_from_xml(
+        words_xml_path)
 
-# print(f"Number of images: {len(img_paths)}")
-# print(f"Example image path: {img_paths[0]}")
-# print(f"Example image size: {img_sizes[0]}")
-# print(f"Example bounding boxes: {bboxes[0][:2]}")
-# print(f"Example labels: {img_labels[0][:2]}")
+    # print(f"Number of images: {len(img_paths)}")
+    # print(f"Example image path: {img_paths[0]}")
+    # print(f"Example image size: {img_sizes[0]}")
+    # print(f"Example bounding boxes: {bboxes[0][:2]}")
+    # print(f"Example labels: {img_labels[0][:2]}")
 
-# Convert data to YOLO format
-yolo_data = convert_to_yolo_format(img_paths, img_sizes, bboxes)
+    # Convert data to YOLO format
+    yolo_data = convert_to_yolo_format(img_paths, img_sizes, bboxes)
 
-seed = 0
-val_size = 0.2
-test_size = 0.125
-is_shuffle = True
-train_data, test_data = train_test_split(
-    yolo_data,
-    test_size=val_size,
-    random_state=seed,
-    shuffle=is_shuffle
-)
+    seed = 0
+    val_size = 0.2
+    test_size = 0.125
+    is_shuffle = True
+    train_data, test_data = train_test_split(
+        yolo_data,
+        test_size=val_size,
+        random_state=seed,
+        shuffle=is_shuffle
+    )
 
-test_data, val_data = train_test_split(
-    test_data,
-    test_size=test_size,
-    random_state=seed,
-    shuffle=is_shuffle
-)
+    test_data, val_data = train_test_split(
+        test_data,
+        test_size=test_size,
+        random_state=seed,
+        shuffle=is_shuffle
+    )
 
-save_yolo_data_dir = 'data/yolo_data'
-os.makedirs(save_yolo_data_dir, exist_ok=True)
-save_train_dir = os.path.join(save_yolo_data_dir, 'train')
-save_val_dir = os.path.join(save_yolo_data_dir, 'val')
-save_test_dir = os.path.join(save_yolo_data_dir, 'test')
+    save_yolo_data_dir = 'data/yolo_data'
+    os.makedirs(save_yolo_data_dir, exist_ok=True)
+    save_train_dir = os.path.join(save_yolo_data_dir, 'train')
+    save_val_dir = os.path.join(save_yolo_data_dir, 'val')
+    save_test_dir = os.path.join(save_yolo_data_dir, 'test')
 
-save_data(train_data, dataset_dir, save_train_dir)
-save_data(val_data, dataset_dir, save_val_dir)
-save_data(test_data, dataset_dir, save_test_dir)
+    save_data(train_data, dataset_dir, save_train_dir)
+    save_data(val_data, dataset_dir, save_val_dir)
+    save_data(test_data, dataset_dir, save_test_dir)
+
+
+if __name__ == "__main__":
+    main()
